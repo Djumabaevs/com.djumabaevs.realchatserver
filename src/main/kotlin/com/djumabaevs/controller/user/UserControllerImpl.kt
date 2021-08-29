@@ -2,6 +2,7 @@ package com.djumabaevs.controller.user
 
 import com.djumabaevs.data.models.User
 import org.litote.kmongo.coroutine.CoroutineDatabase
+import org.litote.kmongo.eq
 
 class UserControllerImpl(
     db: CoroutineDatabase
@@ -9,16 +10,16 @@ class UserControllerImpl(
 
     private val users = db.getCollection<User>()
 
-    override suspend fun createUser(user: User) {
-        TODO("Not yet implemented")
+    override suspend fun createUser(user: User){
+        users.insertOne(user)
     }
 
     override suspend fun getUserById(id: String): User? {
-        TODO("Not yet implemented")
+         return users.findOneById(id)
     }
 
     override suspend fun getUserByEmail(email: String): User? {
-        TODO("Not yet implemented")
+         return users.findOne(User::email eq email)
     }
 
 }
