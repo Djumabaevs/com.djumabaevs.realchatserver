@@ -1,5 +1,7 @@
 package com.djumabaevs.controller.user
 
+import com.djumabaevs.data.models.User
+
 interface UserController {
 
     suspend fun createUser(user: User)
