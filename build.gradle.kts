@@ -33,6 +33,7 @@ dependencies {
 
     //KMongo db
     implementation("org.litote.kmongo:kmongo:4.2.8")
+    implementation("org.litote.kmongo:kmongo-coroutine:$kmongo_version")
 
     // Koin core features
     implementation("io.insert-koin:koin-core:$koin_version")
