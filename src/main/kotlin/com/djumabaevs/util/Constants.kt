@@ -2,5 +2,5 @@ package com.djumabaevs.util
 
 object Constants {
 
-    val DATABASE_NAME = "social_network_twitch"
+    val DATABASE_NAME = "real_chat_server"
 }

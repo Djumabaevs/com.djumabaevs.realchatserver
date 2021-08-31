@@ -1,8 +1,8 @@
-package com.djumabaevs.controller.user
+package com.djumabaevs.data.repository.user
 
 import com.djumabaevs.data.models.User
 
-interface UserController {
+interface UserRepository {
 
     suspend fun createUser(user: User)
 

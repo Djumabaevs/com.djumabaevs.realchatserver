@@ -1,6 +1,6 @@
 package com.djumabaevs.routes
 
-import com.djumabaevs.controller.user.UserController
+import com.djumabaevs.data.repository.user.UserRepository
 import com.djumabaevs.data.models.User
 import com.djumabaevs.data.requests.CreateAccountRequest
 import com.djumabaevs.data.responses.BasicApiResponse
@@ -14,7 +14,7 @@ import com.djumabaevs.util.*
 import com.djumabaevs.util.ApiResponseMessages.USER_ALREADY_EXISTS
 
 fun Route.userRoutes() {
-    val userController: UserController by inject()
+    val userController: UserRepository by inject()
     route("/api/user/create") {
         post {
             val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
