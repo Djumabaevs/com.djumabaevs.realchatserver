@@ -1,6 +1,7 @@
 package com.djumabaevs.routes
 
 import com.djumabaevs.controller.user.UserController
+import com.djumabaevs.data.models.User
 import com.djumabaevs.data.requests.CreateAccountRequest
 import com.djumabaevs.data.responses.BasicApiResponse
 import io.ktor.application.*
@@ -30,6 +31,21 @@ fun Route.userRoutes() {
                 )
                 return@post
             }
+            userController.createUser(
+                User(
+                    email = request.email,
+                    username = request.username,
+                    password = request.password,
+                    profileImageUrl = "",
+                    bio = "",
+                    gitHubUrl = null,
+                    instagramUrl = null,
+                    linkedInUrl = null
+                )
+            )
+            call.respond(
+                BasicApiResponse(successful = true)
+            )
         }
     }
 }
