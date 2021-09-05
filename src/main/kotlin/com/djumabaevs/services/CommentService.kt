@@ -1,4 +1,9 @@
-package com.djumabaevs.data.services
+package com.djumabaevs.services
+
+import com.djumabaevs.data.models.Comment
+import com.djumabaevs.data.repository.comment.CommentRepository
+import com.djumabaevs.data.requests.CreateCommentRequest
+import com.djumabaevs.util.Constants
 
 class CommentService(
     private val repository: CommentRepository

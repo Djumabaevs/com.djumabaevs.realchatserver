@@ -4,6 +4,9 @@ import com.djumabaevs.data.repository.follow.FollowRepository
 import com.djumabaevs.data.repository.post.PostRepository
 import com.djumabaevs.data.repository.user.UserRepository
 import com.djumabaevs.routes.*
+import com.djumabaevs.services.CommentService
+import com.djumabaevs.services.FollowService
+import com.djumabaevs.services.LikeService
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.content.*

@@ -1,4 +1,6 @@
-package com.djumabaevs.data.services
+package com.djumabaevs.services
+
+import com.djumabaevs.data.repository.likes.LikeRepository
 
 class LikeService(
     private val repository: LikeRepository

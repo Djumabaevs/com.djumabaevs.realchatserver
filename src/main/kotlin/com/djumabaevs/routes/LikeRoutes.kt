@@ -1,5 +1,16 @@
 package com.djumabaevs.routes
 
+import com.djumabaevs.data.requests.LikeUpdateRequest
+import com.djumabaevs.data.responses.BasicApiResponse
+import com.djumabaevs.services.LikeService
+import com.djumabaevs.util.ApiResponseMessages
+import io.ktor.application.*
+import io.ktor.auth.*
+import io.ktor.http.*
+import io.ktor.request.*
+import io.ktor.response.*
+import io.ktor.routing.*
+
 fun Route.likeParent(
     likeService: LikeService,
     userService: UserService
