@@ -17,14 +17,13 @@ import com.djumabaevs.util.ApiResponseMessages.INVALID_CREDENTIALS
 import com.djumabaevs.util.ApiResponseMessages.USER_ALREADY_EXISTS
 
 
-fun Route.createUserRoute(userRepository: UserRepository) {
+fun Route.createUser(userService: UserService) {
     post("/api/user/create") {
         val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
             return@post
         }
-        val userExists = userRepository.getUserByEmail(request.email) != null
-        if (userExists) {
+        if (userService.doesUserWithEmailExist(request.email)) {
             call.respond(
                 BasicApiResponse(
                     successful = false,
@@ -33,34 +32,31 @@ fun Route.createUserRoute(userRepository: UserRepository) {
             )
             return@post
         }
-        if (request.email.isBlank() || request.password.isBlank() || request.username.isBlank()) {
-            call.respond(
-                BasicApiResponse(
-                    successful = false,
-                    message = FIELDS_BLANK
+        when(userService.validateCreateAccountRequest(request)) {
+            is UserService.ValidationEvent.ErrorFieldEmpty -> {
+                call.respond(
+                    BasicApiResponse(
+                        successful = false,
+                        message = FIELDS_BLANK
+                    )
                 )
-            )
-            return@post
+            }
+            is UserService.ValidationEvent.Success -> {
+                userService.createUser(request)
+                call.respond(
+                    BasicApiResponse(successful = true)
+                )
+            }
         }
-        userRepository.createUser(
-            User(
-                email = request.email,
-                username = request.username,
-                password = request.password,
-                profileImageUrl = "",
-                bio = "",
-                gitHubUrl = null,
-                instagramUrl = null,
-                linkedInUrl = null
-            )
-        )
-        call.respond(
-            BasicApiResponse(successful = true)
-        )
     }
 }
 
-fun Route.loginUser(userRepository: UserRepository) {
+fun Route.loginUser(
+    userService: UserService,
+    jwtIssuer: String,
+    jwtAudience: String,
+    jwtSecret: String
+) {
     post("/api/user/login") {
         val request = call.receiveOrNull<LoginRequest>() ?: kotlin.run {
             call.respond(HttpStatusCode.BadRequest)
@@ -72,16 +68,18 @@ fun Route.loginUser(userRepository: UserRepository) {
             return@post
         }
 
-        val isCorrectPassword = userRepository.doesPasswordForUserMatch(
-            email = request.email,
-            enteredPassword = request.password
-        )
+        val isCorrectPassword = userService.doesPasswordMatchForUser(request)
         if(isCorrectPassword) {
+            val expiresIn = 1000L * 60L * 60L * 24L * 365L
+            val token = JWT.create()
+                .withClaim("email", request.email)
+                .withIssuer(jwtIssuer)
+                .withExpiresAt(Date(System.currentTimeMillis() + expiresIn))
+                .withAudience(jwtAudience)
+                .sign(Algorithm.HMAC256(jwtSecret))
             call.respond(
                 HttpStatusCode.OK,
-                BasicApiResponse(
-                    successful = true
-                )
+                AuthResponse(token = token)
             )
         } else {
             call.respond(
