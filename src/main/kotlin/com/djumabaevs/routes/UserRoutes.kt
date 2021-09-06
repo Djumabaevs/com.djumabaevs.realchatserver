@@ -8,6 +8,7 @@ import com.djumabaevs.data.requests.CreateAccountRequest
 import com.djumabaevs.data.requests.LoginRequest
 import com.djumabaevs.data.responses.AuthResponse
 import com.djumabaevs.data.responses.BasicApiResponse
+import com.djumabaevs.services.UserService
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.request.*
