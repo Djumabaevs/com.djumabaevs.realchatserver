@@ -6,6 +6,7 @@ import org.litote.kmongo.and
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 
+
 class LikeRepositoryImpl(
     db: CoroutineDatabase
 ) : LikeRepository {
@@ -13,10 +14,10 @@ class LikeRepositoryImpl(
     private val likes = db.getCollection<Like>()
     private val users = db.getCollection<User>()
 
-    override suspend fun likeParent(userId: String, parentId: String): Boolean {
+    override suspend fun likeParent(userId: String, parentId: String, parentType: Int): Boolean {
         val doesUserExist = users.findOneById(userId) != null
         return if(doesUserExist) {
-            likes.insertOne(Like(userId, parentId))
+            likes.insertOne(Like(userId, parentId, parentType))
             true
         } else {
             false
