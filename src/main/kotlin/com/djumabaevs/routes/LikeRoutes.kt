@@ -3,6 +3,7 @@ package com.djumabaevs.routes
 import com.djumabaevs.data.requests.LikeUpdateRequest
 import com.djumabaevs.data.responses.BasicApiResponse
 import com.djumabaevs.services.LikeService
+import com.djumabaevs.services.UserService
 import com.djumabaevs.util.ApiResponseMessages
 import io.ktor.application.*
 import io.ktor.auth.*

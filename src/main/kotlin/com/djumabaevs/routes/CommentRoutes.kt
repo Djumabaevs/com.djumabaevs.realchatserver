@@ -4,6 +4,8 @@ import com.djumabaevs.data.requests.CreateCommentRequest
 import com.djumabaevs.data.requests.DeleteCommentRequest
 import com.djumabaevs.data.responses.BasicApiResponse
 import com.djumabaevs.services.CommentService
+import com.djumabaevs.services.LikeService
+import com.djumabaevs.services.UserService
 import com.djumabaevs.util.ApiResponseMessages
 import com.djumabaevs.util.QueryParams
 import io.ktor.application.*
