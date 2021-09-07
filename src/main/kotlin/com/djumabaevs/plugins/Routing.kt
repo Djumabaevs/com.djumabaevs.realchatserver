@@ -5,6 +5,7 @@ import com.djumabaevs.data.repository.post.PostRepository
 import com.djumabaevs.data.repository.user.UserRepository
 import com.djumabaevs.routes.*
 import com.djumabaevs.services.*
+import com.djumabaevs.services.UserService
 import io.ktor.routing.*
 import io.ktor.http.*
 import io.ktor.content.*

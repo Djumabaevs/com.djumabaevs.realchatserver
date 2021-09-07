@@ -1,8 +1,11 @@
 package com.djumabaevs.routes
 
+import com.djumabaevs.data.models.Activity
 import com.djumabaevs.data.repository.follow.FollowRepository
 import com.djumabaevs.data.requests.FollowUpdateRequest
 import com.djumabaevs.data.responses.BasicApiResponse
+import com.djumabaevs.data.util.ActivityType
+import com.djumabaevs.services.ActivityService
 import com.djumabaevs.services.FollowService
 import com.djumabaevs.util.ApiResponseMessages.USER_NOT_FOUND
 import io.ktor.application.*

@@ -5,6 +5,7 @@ import com.djumabaevs.data.repository.post.PostRepository
 import com.djumabaevs.data.requests.CreatePostRequest
 import com.djumabaevs.data.requests.DeletePostRequest
 import com.djumabaevs.data.responses.BasicApiResponse
+import com.djumabaevs.services.CommentService
 import com.djumabaevs.services.LikeService
 import com.djumabaevs.services.PostService
 import com.djumabaevs.services.UserService
