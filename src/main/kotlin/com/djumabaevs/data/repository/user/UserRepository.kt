@@ -2,6 +2,7 @@ package com.djumabaevs.data.repository.user
 
 import com.djumabaevs.data.models.User
 
+
 interface UserRepository {
 
     suspend fun createUser(user: User)
@@ -13,4 +14,6 @@ interface UserRepository {
     suspend fun doesPasswordForUserMatch(email: String, enteredPassword: String): Boolean
 
     suspend fun doesEmailBelongToUserId(email: String, userId: String): Boolean
+
+    suspend fun searchForUsers(query: String): List<User>
 }
