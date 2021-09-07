@@ -19,81 +19,84 @@ import com.djumabaevs.util.*
 import com.djumabaevs.util.ApiResponseMessages.FIELDS_BLANK
 import com.djumabaevs.util.ApiResponseMessages.INVALID_CREDENTIALS
 import com.djumabaevs.util.ApiResponseMessages.USER_ALREADY_EXISTS
+import io.ktor.auth.*
 import java.util.*
 
 
-fun Route.createUser(userService: UserService) {
-    post("/api/user/create") {
-        val request = call.receiveOrNull<CreateAccountRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
-            return@post
-        }
-        if (userService.doesUserWithEmailExist(request.email)) {
-            call.respond(
-                BasicApiResponse(
-                    successful = false,
-                    message = USER_ALREADY_EXISTS
-                )
-            )
-            return@post
-        }
-        when(userService.validateCreateAccountRequest(request)) {
-            is UserService.ValidationEvent.ErrorFieldEmpty -> {
+fun Route.createPost(
+    postService: PostService,
+) {
+    authenticate {
+        post("/api/post/create") {
+            val request = call.receiveOrNull<CreatePostRequest>() ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@post
+            }
+            val userId = call.userId
+
+            val didUserExist = postService.createPostIfUserExists(request, userId)
+            if (!didUserExist) {
                 call.respond(
+                    HttpStatusCode.OK,
                     BasicApiResponse(
                         successful = false,
-                        message = FIELDS_BLANK
+                        message = ApiResponseMessages.USER_NOT_FOUND
                     )
                 )
-            }
-            is UserService.ValidationEvent.Success -> {
-                userService.createUser(request)
+            } else {
                 call.respond(
-                    BasicApiResponse(successful = true)
+                    HttpStatusCode.OK,
+                    BasicApiResponse(
+                        successful = true,
+                    )
                 )
             }
         }
     }
 }
 
-fun Route.loginUser(
-    userService: UserService,
-    jwtIssuer: String,
-    jwtAudience: String,
-    jwtSecret: String
+fun Route.getPostsForFollows(
+    postService: PostService,
 ) {
-    post("/api/user/login") {
-        val request = call.receiveOrNull<LoginRequest>() ?: kotlin.run {
-            call.respond(HttpStatusCode.BadRequest)
-            return@post
-        }
+    authenticate {
+        get("/api/post/get") {
+            val page = call.parameters[QueryParams.PARAM_PAGE]?.toIntOrNull() ?: 0
+            val pageSize = call.parameters[QueryParams.PARAM_PAGE_SIZE]?.toIntOrNull() ?:
+            Constants.DEFAULT_POST_PAGE_SIZE
 
-        if (request.email.isBlank() || request.password.isBlank()) {
-            call.respond(HttpStatusCode.BadRequest)
-            return@post
-        }
-
-        val isCorrectPassword = userService.doesPasswordMatchForUser(request)
-        if(isCorrectPassword) {
-            val expiresIn = 1000L * 60L * 60L * 24L * 365L
-            val token = JWT.create()
-                .withClaim("email", request.email)
-                .withIssuer(jwtIssuer)
-                .withExpiresAt(Date(System.currentTimeMillis() + expiresIn))
-                .withAudience(jwtAudience)
-                .sign(Algorithm.HMAC256(jwtSecret))
+            val posts = postService.getPostsForFollows(call.userId, page, pageSize)
             call.respond(
                 HttpStatusCode.OK,
-                AuthResponse(token = token)
+                posts
             )
-        } else {
-            call.respond(
-                HttpStatusCode.OK,
-                BasicApiResponse(
-                    successful = false,
-                    message = INVALID_CREDENTIALS
-                )
-            )
+        }
+    }
+}
+
+fun Route.deletePost(
+    postService: PostService,
+    likeService: LikeService,
+    commentService: CommentService
+) {
+    authenticate {
+        delete("/api/post/delete") {
+            val request = call.receiveOrNull<DeletePostRequest>() ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@delete
+            }
+            val post = postService.getPost(request.postId)
+            if(post == null) {
+                call.respond(HttpStatusCode.NotFound)
+                return@delete
+            }
+            if(post.userId == call.userId) {
+                postService.deletePost(request.postId)
+                likeService.deleteLikesForParent(request.postId)
+                commentService.deleteCommentsForPost(request.postId)
+                call.respond(HttpStatusCode.OK)
+            } else {
+                call.respond(HttpStatusCode.Unauthorized)
+            }
         }
     }
 }

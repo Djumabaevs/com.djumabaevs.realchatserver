@@ -1,5 +1,7 @@
 package com.djumabaevs.di
 
+import com.djumabaevs.data.repository.activity.ActivityRepository
+import com.djumabaevs.data.repository.activity.ActivityRepositoryImpl
 import com.djumabaevs.data.repository.comment.CommentRepository
 import com.djumabaevs.data.repository.comment.CommentRepositoryImpl
 import com.djumabaevs.data.repository.follow.FollowRepository
@@ -12,9 +14,11 @@ import com.djumabaevs.data.repository.user.UserRepository
 import com.djumabaevs.data.repository.user.UserRepositoryImpl
 import com.djumabaevs.services.*
 import com.djumabaevs.util.Constants
+import org.koin.core.scope.get
 import org.koin.dsl.module
 import org.litote.kmongo.coroutine.coroutine
 import org.litote.kmongo.reactivestreams.KMongo
+
 
 val mainModule = module {
     single {
@@ -36,9 +40,13 @@ val mainModule = module {
     single<CommentRepository> {
         CommentRepositoryImpl(get())
     }
-    single { UserService(get()) }
+    single<ActivityRepository> {
+        ActivityRepositoryImpl(get())
+    }
+    single { UserService(get(), get()) }
     single { FollowService(get()) }
     single { PostService(get()) }
     single { LikeService(get()) }
     single { CommentService(get()) }
+    single { ActivityService(get(), get(), get()) }
 }
