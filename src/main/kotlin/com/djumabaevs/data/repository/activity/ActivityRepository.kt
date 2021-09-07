@@ -1,5 +1,8 @@
 package com.djumabaevs.data.repository.activity
 
+import com.djumabaevs.data.models.Activity
+import com.djumabaevs.util.Constants
+
 interface ActivityRepository {
 
     suspend fun getActivitiesForUser(
