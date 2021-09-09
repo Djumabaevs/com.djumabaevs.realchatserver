@@ -36,6 +36,9 @@ fun Application.configureRouting() {
             jwtSecret = jwtSecret
         )
         searchUser(userService)
+        getUserProfile(userService)
+        getPostsForProfile(postService)
+        updateUserProfile(userService)
 
         // Following routes
         followUser(followService, activityService)
@@ -57,5 +60,9 @@ fun Application.configureRouting() {
 
         // Activity routes
         getActivities(activityService)
+
+        static {
+            resources("static")
+        }
     }
 }
