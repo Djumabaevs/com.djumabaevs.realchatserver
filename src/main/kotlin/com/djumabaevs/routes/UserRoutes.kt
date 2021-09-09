@@ -8,6 +8,7 @@ import com.djumabaevs.data.repository.follow.FollowRepository
 import com.djumabaevs.data.requests.CreateAccountRequest
 import com.djumabaevs.data.requests.CreatePostRequest
 import com.djumabaevs.data.requests.LoginRequest
+import com.djumabaevs.data.requests.UpdateProfileRequest
 import com.djumabaevs.data.responses.AuthResponse
 import com.djumabaevs.data.responses.BasicApiResponse
 import com.djumabaevs.data.responses.UserResponseItem
@@ -23,6 +24,8 @@ import com.djumabaevs.util.*
 import com.djumabaevs.util.ApiResponseMessages.FIELDS_BLANK
 import com.djumabaevs.util.ApiResponseMessages.INVALID_CREDENTIALS
 import com.djumabaevs.util.ApiResponseMessages.USER_ALREADY_EXISTS
+import com.djumabaevs.util.Constants.BASE_URL
+import com.djumabaevs.util.Constants.PROFILE_PICTURE_PATH
 import com.google.gson.Gson
 import io.ktor.auth.*
 import io.ktor.http.content.*
