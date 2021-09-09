@@ -6,6 +6,7 @@ import com.djumabaevs.plugins.*
 import org.koin.ktor.ext.Koin
 import org.koin.ktor.ext.modules
 
+
 fun main(args: Array<String>): Unit =
     io.ktor.server.netty.EngineMain.main(args)
 
