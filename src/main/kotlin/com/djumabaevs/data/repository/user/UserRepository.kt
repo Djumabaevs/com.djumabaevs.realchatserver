@@ -1,6 +1,7 @@
 package com.djumabaevs.data.repository.user
 
 import com.djumabaevs.data.models.User
+import com.djumabaevs.data.requests.UpdateProfileRequest
 
 
 interface UserRepository {

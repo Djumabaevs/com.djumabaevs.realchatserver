@@ -1,6 +1,7 @@
 package com.djumabaevs.data.repository.user
 
 import com.djumabaevs.data.models.User
+import com.djumabaevs.data.requests.UpdateProfileRequest
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 import org.litote.kmongo.or
@@ -70,3 +71,4 @@ class UserRepositoryImpl(
             )
         ).toList()
     }
+}
