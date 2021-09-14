@@ -2,6 +2,7 @@ package com.djumabaevs.data.repository.user
 
 import com.djumabaevs.data.models.User
 import com.djumabaevs.data.requests.UpdateProfileRequest
+import org.litote.kmongo.`in`
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 import org.litote.kmongo.or
@@ -69,6 +70,12 @@ class UserRepositoryImpl(
                 User::username regex Regex("(?i).*$query.*"),
                 User::email eq query
             )
-        ).toList()
+        )
+            .descendingSort(User::followerCount)
+            .toList()
+    }
+
+    override suspend fun getUsers(userIds: List<String>): List<User> {
+        return users.find(User::id `in` userIds).toList()
     }
 }
