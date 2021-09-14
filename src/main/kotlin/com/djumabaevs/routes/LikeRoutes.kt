@@ -7,6 +7,7 @@ import com.djumabaevs.services.ActivityService
 import com.djumabaevs.services.LikeService
 import com.djumabaevs.services.UserService
 import com.djumabaevs.util.ApiResponseMessages
+import com.djumabaevs.util.QueryParams
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.http.*
@@ -78,6 +79,25 @@ fun Route.unlikeParent(
                     )
                 )
             }
+        }
+    }
+}
+
+fun Route.getLikesForParent(likeService: LikeService) {
+    authenticate {
+        get("/api/like/parent") {
+            val parentId = call.parameters[QueryParams.PARAM_PARENT_ID] ?: kotlin.run {
+                call.respond(HttpStatusCode.BadRequest)
+                return@get
+            }
+            val usersWhoLikedParent = likeService.getUsersWhoLikedParent(
+                parentId = parentId,
+                call.userId
+            )
+            call.respond(
+                HttpStatusCode.OK,
+                usersWhoLikedParent
+            )
         }
     }
 }
