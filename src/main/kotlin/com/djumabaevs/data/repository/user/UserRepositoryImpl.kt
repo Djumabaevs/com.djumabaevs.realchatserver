@@ -71,6 +71,7 @@ class UserRepositoryImpl(
                 User::email eq query
             )
         )
+
             .descendingSort(User::followerCount)
             .toList()
     }
