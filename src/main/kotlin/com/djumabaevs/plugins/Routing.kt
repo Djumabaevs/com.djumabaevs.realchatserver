@@ -23,6 +23,7 @@ fun Application.configureRouting() {
     val commentService: CommentService by inject()
     val activityService: ActivityService by inject()
 
+
     val jwtIssuer = environment.config.property("jwt.domain").getString()
     val jwtAudience = environment.config.property("jwt.audience").getString()
     val jwtSecret = environment.config.property("jwt.secret").getString()
